@@ -1,47 +1,5 @@
-pipeline {
-    agent any
-
-    stages {
-        stage('Checkout') {
-            steps {
-                // Pull code from GitHub
-                checkout scm
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo "Building the project..."
-                // Example for Java/Maven:
-                // sh 'mvn clean package'
-                // Example for Node.js:
-                // sh 'npm install'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo "Running tests..."
-                // Example:
-                // sh 'npm test'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo "Deploying the application..."
-                // Example local deployment:
-                // sh 'docker build -t myapp . && docker run -d -p 8080:8080 myapp'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "✅ Build, test, and deploy successful!"
-        }
-        failure {
-            echo "❌ Build failed!"
-        }
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, Jenkins + GitHub + Java!");
     }
 }
