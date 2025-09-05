@@ -1,0 +1,23 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/youruser/yourrepo.git']]])
+      }
+    }
+
+    stage('Build') {
+      steps {
+        bat 'mvn -B clean package'   // requires Maven in PATH or configured in Jenkins
+      }
+    }
+
+    stage('Run') {
+      steps {
+        bat 'java -jar target\\*.jar'
+      }
+    }
+  }
+}
