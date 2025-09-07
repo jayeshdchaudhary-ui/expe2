@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven-3.9.11'   // matches the name you gave in Jenkins
+        maven 'Maven-3.9.11'   // Must match the Maven name in Jenkins -> Global Tool Config
     }
 
     stages {
@@ -15,17 +15,21 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat "mvn clean package"
+                dir('myapp') {   // move into the folder where pom.xml lives
+                    bat "mvn clean package"
+                }
             }
         }
 
         stage('Deploy to Tomcat') {
             steps {
-                bat """
-                curl -u tomcat:s3cret ^
-                    --upload-file target/myapp.war ^
-                    "http://localhost:8080/manager/text/deploy?path=/myapp&update=true"
-                """
+                dir('myapp') {   // deploy the war from inside myapp
+                    bat """
+                    curl -u tomcat:s3cret ^
+                        --upload-file target/myapp.war ^
+                        "http://localhost:8080/manager/text/deploy?path=/myapp&update=true"
+                    """
+                }
             }
         }
     }
