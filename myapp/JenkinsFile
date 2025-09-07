@@ -1,24 +1,27 @@
 pipeline {
     agent any
 
-   stage('Checkout') {
-    steps {
-        git branch: 'main',
-            url: 'https://github.com/jayeshdchaudhary-ui/expe2.git'
-     }
-   }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/jayeshdchaudhary-ui/expe2.git'
+            }
+        }
 
         stage('Build') {
             steps {
-                echo "Building project with Maven..."
-                bat 'mvn clean package'
+                bat "mvn clean package"
             }
         }
 
         stage('Deploy to Tomcat') {
             steps {
-                echo "Deploying WAR to Tomcat..."
-                bat '"C:\\Program Files\\Git\\mingw64\\bin\\curl.exe" -u tomcat:s3cret --upload-file target\\myapp.war "http://localhost:8080/manager/text/deploy?path=/myapp&update=true"'
+                bat """
+                curl -u tomcat:s3cret ^
+                    --upload-file target/myapp.war ^
+                    "http://localhost:8080/manager/text/deploy?path=/myapp&update=true"
+                """
             }
         }
     }
