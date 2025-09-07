@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven-3.9.11'   // matches the name you gave in Jenkins
+    }
+
     stages {
         stage('Checkout') {
             steps {
