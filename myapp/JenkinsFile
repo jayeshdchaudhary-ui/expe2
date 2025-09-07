@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'git@github.com:jayeshdchaudhary-ui/expe2.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo "Building project with Maven..."
+                bat 'mvn clean package'
+            }
+        }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                echo "Deploying WAR to Tomcat..."
+                bat '"C:\\Program Files\\Git\\mingw64\\bin\\curl.exe" -u tomcat:s3cret --upload-file target\\myapp.war "http://localhost:8080/manager/text/deploy?path=/myapp&update=true"'
+            }
+        }
+    }
+}
